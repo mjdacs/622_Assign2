@@ -29,18 +29,33 @@ def main():
     
     data_cleaner = [train_set, test_set]
 
-    print("")
-    print("Checking for null values: train & test")
-    print("=" * 20)
-    print(train_set.isnull().sum())
-    print("-" * 10)
-    print(test_set.isnull().sum())
-    print("=" * 20)
+    # peak at null values before imputation
+    print('\n',
+    "Checking for null values: train & test.\n", 
+    "=" *20, '\n',
+    train_set.isnull().sum(), '\n',
+    "=" *10, '\n',
+    test_set.isnull().sum(), '\n',
+    "=" *20)
     
+    # impute and drop training and test sets
     train_set, test_set = impute_and_drop(train_set, test_set)
 
+    # confirm imputation and dropped columns
+    print('\n',
+    "Age, Embarked, and Fare successfully imputed in the training & test sets.\n",
+    "Cabin, PassengerId, and Ticket were successfully dropped in the training set.\n", 
+    "=" *20, '\n',
+    train_set.isnull().sum(), '\n',
+    "=" *10, '\n',
+    test_set.isnull().sum(), '\n',
+    "=" *20)
 
+    print(train_set.info(),
+    test_set.info(),
+    train_set.sample(10))
 
+    print(test_set.Age.head())
 
  
 def impute_and_drop(train_set, test_set):
@@ -61,21 +76,12 @@ def impute_and_drop(train_set, test_set):
     """  
     for dataset in [train_set, test_set]:
         
-        dataset['Age']      = lambda x: x['Age'].fillna(x['Age'].median(), inplace = True)
-        dataset['Embarked'] = lambda x: x['Embarked'].fillna(x['Embarked'].mode(), inplace = True)
-        dataset['Fare']     = lambda x: x['Fare'].fillna(x['Fare'].median(), inplace = True)
+        dataset['Age'].fillna(dataset['Age'].median(), inplace = True)
+        dataset['Embarked'].fillna(dataset['Embarked'].mode(), inplace = True)
+        dataset['Fare'].fillna(dataset['Fare'].median(), inplace = True)
         
     train_set.drop(['Cabin', 'PassengerId', 'Ticket'], axis=1, inplace=True) # drop from training set only
-    
-    print("")
-    print("Age, Embarked, and Fare successfully imputed in the training & test sets.\n",
-    "Cabin, PassengerId, and Ticket were successfully dropped in the training set.")
-    print("=" * 20)
-    print(train_set.isnull().sum())
-    print("-" * 10)
-    print(test_set.isnull().sum())
-    print("=" * 20)
-    
+     
     return train_set, test_set
 
 
@@ -84,7 +90,7 @@ def feature_engineer(train_set, test_set):
 
     for dataset in [train_set, test_set]:
 
-        pass
+        dataset['FamilySize'] = lambda x: x['SibSp']
 
 
 def create_dummy_variables(train_set, test_set):
