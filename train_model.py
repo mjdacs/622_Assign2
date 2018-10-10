@@ -57,6 +57,7 @@ def main():
 
     print(test_set.Age.head())
 
+    
  
 def impute_and_drop(train_set, test_set):
     """Impute and drop relevant variables
