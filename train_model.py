@@ -4,11 +4,9 @@ import pandas as pd
 
 # Model algorithm
 from sklearn.ensemble import RandomForestClassifier
+from sklearn.preprocessing import LabelEncoder
 from sklearn.model_selection import train_test_split
 from sklearn.externals import joblib
-
-from sklearn.preprocessing import LabelEncoder
-
 
 # pull and check data
 import pull_data as pull
@@ -19,20 +17,20 @@ def clean_and_train():
     
     Parameters
     ----------
-    No parameters are taken. The function is meant to run the rest of the
-    functions in the program which are designed to impute the dataset,
-    engineer new features, and encode some of the variables.
+    No parameters are taken. This function is meant to call the rest of the
+    functions which are designed to impute the dataset, engineer new 
+    features, and encode variables.
 
-    After the dataset is cleaned, the training set is itself split into a
+    After the dataset is cleaned, the training set itself is split into a
     training and test set, due to there not existing a target variable in
     the test csv. It was considered to submit scoring to kaggle to obtain
     accuracy results but it was not part of the requirements. The only way
     to obtain accuracy is to split the local training set 80/20 and score
-    against the test portion. You can see this being the focus starting
+    against its test portion. You can see this being the focus starting
     with line 56 were the train set is isolated from full_data.    
 
     The model is fitted and insead of .pkl, sklearn's joblib function was
-    used to save the model locally.
+    used to save the model locally as model.joblib.
         
     Returns
     -------
@@ -86,8 +84,7 @@ def impute(df):
     df['Age'].fillna(df['Age'].median(), inplace = True)
     df['Embarked'].fillna(df['Embarked'].mode(), inplace = True)
     df['Fare'].fillna(df['Fare'].median(), inplace = True)
-        
-     
+             
     return df
 
 def feature_eng(df):
