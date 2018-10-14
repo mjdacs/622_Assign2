@@ -1,5 +1,6 @@
 import pandas as pd 
 import subprocess
+import time
 
 
 """
@@ -35,7 +36,8 @@ def convert_and_check_data(train_csv: str, test_csv: str):
     train_set = pd.read_csv(train_csv) 
     test_set = pd.read_csv(test_csv) 
     print("=" * 33)
-    print("csv files converted to DataFrames")   
+    print("csv files converted to DataFrames.", '\n', "Checking correct download...") 
+    time.sleep(3)  
     confirm_data_exists_and_train_isgreater_than_test(train_set, test_set)
     return train_set, test_set
 

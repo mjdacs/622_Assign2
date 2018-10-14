@@ -10,14 +10,15 @@ from sklearn.externals import joblib
 
 # pull and check data
 import pull_data as pull
-
+import time
 
 def clean_and_train():
-    """The main function of this file. Cleans the data and trains the model
+    """This is the main function of the file. It cleans the data and trains 
+    the model
     
     Parameters
     ----------
-    No parameters are taken. This function is meant to call the rest of the
+    No parameters are taken. This function is meant to call the other
     functions which are designed to impute the dataset, engineer new 
     features, and encode variables.
 
@@ -29,7 +30,7 @@ def clean_and_train():
     against its test portion. You can see this being the focus starting
     with line 56 were the train set is isolated from full_data.    
 
-    The model is fitted and insead of .pkl, sklearn's joblib function was
+    The model is fitted, and insead of .pkl, sklearn's joblib function was
     used to save the model locally as model.joblib.
         
     Returns
@@ -38,28 +39,42 @@ def clean_and_train():
     were returned for score_model.py to pull and predict on.
     """  
     
-    # TURN ON LATER
     train, test = pull.pull_data()
+    print('Checking if data was correctly','\n', 'imported by train_model.py...')
+    time.sleep(3)
+    pull.confirm_data_exists_and_train_isgreater_than_test(train, test)
 
     # train = pd.read_csv("train.csv")
     # test = pd.read_csv("test.csv")
     full_data = pd.concat([train, test], keys=["train", "test"],sort=True)
+
+    print("Cleaning data...")
+    time.sleep(2)
     
+    # var titanic is the cleaned dataset. Uses the .pipe() method to call fns
     titanic = (full_data
      .pipe(impute)
      .pipe(feature_eng)
      .pipe(encode)
      .drop(['Cabin', 'Name', 'PassengerId', 'Ticket'], axis=1, inplace=False))
   
+    print("Data cleaned.")
+    print("=" * 33)
+
+    # df is the cleaned training set with the target variable dropped
     df = (titanic.loc['train']
       .drop(['Survived'], axis=1))
     
+    # y is the target variable
     y = titanic.loc['train']['Survived']
 
-    X_train, X_test, y_train, y_test = train_test_split(df, y, test_size=0.2)
+    # the data is split 80/20 train and test, respectively
+    X_train, X_test, y_train, y_test = train_test_split(df, y, test_size=0.20)
 
+    # RandomForestClassifier class instantiated
     clf = RandomForestClassifier(n_estimators=100)
 
+    # clf is saved as model.joblib using sklearn joblib
     joblib.dump(clf, 'model.joblib')
 
     return X_train, X_test, y_train, y_test

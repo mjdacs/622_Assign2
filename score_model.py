@@ -1,4 +1,4 @@
-
+import time
 import numpy as np
 import pandas as pd 
 
@@ -18,22 +18,28 @@ def main():
     No parameters are taken. The function pulls in the dataset from 
     train_model.py, loads the RandomForestClassifer via the joblib libray,
     predicts and scores the model.
-
     
     Returns
     -------
     Nothing is returned. Accuracy of the model is printed to the console.
     """
-
+    # pull in the returned values of the dataset from train_model.py
     X_train, X_test, y_train, y_test = clean_and_train()
 
+    # load the RandomForestClassifier from train_model.py
     clf = joblib.load('model.joblib') 
 
-    model = clf.fit(X_train, y_train)
+    # Fit the model on the training set
+    clf.fit(X_train, y_train)
+    print("Fitting model...")
+    time.sleep(4)
 
+    # predict survivability based on the test set
     y_pred = clf.predict(X_test)
-
-    print("Accuracy:", metrics.accuracy_score(y_test, y_pred))
+    print("Model fit and predictions made.")
+    # Score the model by comparing the predictions to the target variable
+    # in the test set 
+    print("Random Forest Accuracy:", metrics.accuracy_score(y_test, y_pred))
 
 
 
