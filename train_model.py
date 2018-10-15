@@ -32,6 +32,10 @@ def clean_and_train():
 
     The model is fitted, and insead of .pkl, sklearn's joblib function was
     used to save the model locally as model.joblib.
+
+    NOTE: time.sleep() was used intermittently to make the program feel 
+    like it was thinking and the user can see the steps a little better.
+    Otherwise everything will output in the blink of an eye.
         
     Returns
     -------
